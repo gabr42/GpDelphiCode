@@ -57,6 +57,7 @@ var
   FormMain: TFormMain;
 begin
   InitGDIP;
+  Application.Title := 'DLL Form';
   FormMain := TFormMain.Create(Application);
   FormMain.ShowModal;
   FormMain.Free;

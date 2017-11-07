@@ -35,7 +35,7 @@ var
 begin
   Result := s;
   for i := 1 to Length(Result) do
-    if Result[i].IsLetter then
+    if Result[i].IsLetter or Result[i].IsNumber then
       Result[i] := 'X';
 end;
 

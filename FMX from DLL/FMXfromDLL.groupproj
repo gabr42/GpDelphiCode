@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{7F547031-BCF9-4EF6-8074-799F6E1BD6D5}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="FMXDLL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="DLLHost.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="FMXDLL">
+        <MSBuild Projects="FMXDLL.dproj"/>
+    </Target>
+    <Target Name="FMXDLL:Clean">
+        <MSBuild Projects="FMXDLL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FMXDLL:Make">
+        <MSBuild Projects="FMXDLL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DLLHost">
+        <MSBuild Projects="DLLHost.dproj"/>
+    </Target>
+    <Target Name="DLLHost:Clean">
+        <MSBuild Projects="DLLHost.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DLLHost:Make">
+        <MSBuild Projects="DLLHost.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="FMXDLL;DLLHost"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="FMXDLL:Clean;DLLHost:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="FMXDLL:Make;DLLHost:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

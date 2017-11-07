@@ -19,15 +19,50 @@ procedure ShowMainForm; stdcall;
 
 implementation
 
+uses
+  Winapi.GDIPAPI,
+  Winapi.GDIPOBJ;
+
 {$R *.fmx}
+
+procedure InitGDIP;
+begin
+  // Initialize StartupInput structure
+  StartupInput.DebugEventCallback := nil;
+  StartupInput.SuppressBackgroundThread := False;
+  StartupInput.SuppressExternalCodecs   := False;
+  StartupInput.GdiplusVersion := 1;
+
+  GdiplusStartup(gdiplusToken, @StartupInput, nil);
+end;
+
+procedure FreeGDIP;
+begin
+  if Assigned(GenericSansSerifFontFamily) then
+    GenericSansSerifFontFamily.Free;
+  if Assigned(GenericSerifFontFamily) then
+    GenericSerifFontFamily.Free;
+  if Assigned(GenericMonospaceFontFamily) then
+    GenericMonospaceFontFamily.Free;
+  if Assigned(GenericTypographicStringFormatBuffer) then
+    GenericTypographicStringFormatBuffer.free;
+  if Assigned(GenericDefaultStringFormatBuffer) then
+    GenericDefaultStringFormatBuffer.Free;
+
+  GdiplusShutdown(gdiplusToken);
+end;
 
 procedure ShowMainForm; stdcall;
 var
   FormMain: TFormMain;
 begin
+  InitGDIP;
   FormMain := TFormMain.Create(Application);
   FormMain.ShowModal;
   FormMain.Free;
+  Application.Terminate;
+  Application.ProcessMessages;
+  FreeGDIP;
 end;
 
 { TFormMain }

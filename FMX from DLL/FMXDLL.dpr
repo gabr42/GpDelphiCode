@@ -8,6 +8,8 @@ uses
 {$R *.res}
 
 exports
+  InitGDIP,
+  FreeGDIP,
   ShowMainForm;
 
 begin

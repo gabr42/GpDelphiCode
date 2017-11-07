@@ -7,6 +7,8 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls;
 
 type
+  TInitGDIP = procedure; stdcall;
+  TFreeGDIP = procedure; stdcall;
   TShowMainForm = procedure; stdcall;
 
   TFormHost = class(TForm)
@@ -17,6 +19,8 @@ type
   private
     FLibHandle: THandle;
     FShowMain: TShowMainForm;
+    FInitGDIP: TInitGDIP;
+    FFreeGDIP: TFreeGDIP;
   public
   end;
 
@@ -29,7 +33,9 @@ implementation
 
 procedure TFormHost.Button1Click(Sender: TObject);
 begin
+  FInitGDIP();
   FShowMain();
+  FFreeGDIP();
 end;
 
 procedure TFormHost.FormDestroy(Sender: TObject);
@@ -51,6 +57,16 @@ begin
     FShowMain := GetProcAddress(FLibHandle, 'ShowMainForm');
     if not assigned(FShowMain) then begin
       ShowMessage('Missing export: ShowMainForm');
+      Application.Terminate;
+    end;
+    FInitGDIP := GetProcAddress(FLibHandle, 'InitGDIP');
+    if not assigned(FInitGDIP) then begin
+      ShowMessage('Missing export: InitGDIP');
+      Application.Terminate;
+    end;
+    FFreeGDIP := GetProcAddress(FLibHandle, 'FreeGDIP');
+    if not assigned(FFreeGDIP) then begin
+      ShowMessage('Missing export: FreeGDIP');
       Application.Terminate;
     end;
   end;

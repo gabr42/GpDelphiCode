@@ -34,10 +34,10 @@ end;
 
 procedure TFormHost.FormDestroy(Sender: TObject);
 begin
-  if FLibHandle <> 0 then begin
-    FreeLibrary(FLibHandle);
-    FLibHandle := 0;
-  end;
+//  if FLibHandle <> 0 then begin
+//    FreeLibrary(FLibHandle);
+//    FLibHandle := 0;
+//  end;
 end;
 
 procedure TFormHost.FormCreate(Sender: TObject);

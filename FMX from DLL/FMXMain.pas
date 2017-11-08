@@ -16,6 +16,8 @@ type
   end;
 
 procedure ShowMainForm; stdcall;
+procedure InitGDIP; stdcall;
+procedure FreeGDIP; stdcall;
 
 implementation
 
@@ -56,14 +58,12 @@ procedure ShowMainForm; stdcall;
 var
   FormMain: TFormMain;
 begin
-  InitGDIP;
   Application.Title := 'DLL Form';
-  FormMain := TFormMain.Create(Application);
+  FormMain := TFormMain.Create(nil);
   FormMain.ShowModal;
   FormMain.Free;
-  Application.Terminate;
-  Application.ProcessMessages;
-  FreeGDIP;
+//  Application.Terminate;
+//  Application.ProcessMessages;
 end;
 
 { TFormMain }

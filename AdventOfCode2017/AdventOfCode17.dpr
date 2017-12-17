@@ -32,14 +32,12 @@ function PartB(step, max: integer): integer;
 var
   cp  : integer;
   i   : integer;
-  pos0: integer;
 begin
-  pos0 := 0;
   cp := 1;
   Result := 1;
   for i := 2 to max do begin
     cp := (cp + step) mod i + 1;
-    if cp = (pos0 + 1) then
+    if cp = 1 then
       Result := i;
   end;
 end;

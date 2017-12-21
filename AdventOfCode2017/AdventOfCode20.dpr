@@ -28,7 +28,6 @@ type
     procedure LoadFromFile(const fileName: string);
     procedure MoveParticles;
     procedure RemoveCollisions;
-    procedure SortByAccel;
     procedure SortByPosition;
   end;
 
@@ -44,34 +43,35 @@ end;
 
 function PartA(const fileName: string): integer;
 var
-  part: TParticles;
-begin
-  part := TParticles.Create;
-  try
-    part.LoadFromFile(fileName);
-    part.SortByAccel;
-    Result := part[0].ID;
-  finally FreeAndNil(part); end;
-end;
-
-function PartB(const fileName: string): integer;
-var
-  cnt : integer;
   i   : integer;
   part: TParticles;
 begin
   part := TParticles.Create;
   try
     part.LoadFromFile(fileName);
-    repeat
-      cnt := part.Count;
-      // stupid approach, but it is simple and it works for this puzzle
-      for i := 1 to 10000 do begin
-        part.MoveParticles;
-        part.SortByPosition;
-        part.RemoveCollisions;
-      end;
-    until cnt = part.Count;
+    // stupid approach, but it is simple and it works for this puzzle
+    for i := 1 to 1000 do begin
+      part.MoveParticles;
+      part.SortByPosition;
+    end;
+    Result := part[0].ID;
+  finally FreeAndNil(part); end;
+end;
+
+function PartB(const fileName: string): integer;
+var
+  i   : integer;
+  part: TParticles;
+begin
+  part := TParticles.Create;
+  try
+    part.LoadFromFile(fileName);
+    // stupid approach, but it is simple and it works for this puzzle
+    for i := 1 to 1000 do begin
+      part.MoveParticles;
+      part.SortByPosition;
+      part.RemoveCollisions;
+    end;
     Result := part.Count;
   finally FreeAndNil(part); end;
 end;
@@ -147,19 +147,6 @@ begin
       if badPos.IndexOf(Items[i].Position) >= 0 then
         Delete(i);
   finally FreeAndNil(badPos); end;
-end;
-
-procedure TParticles.SortByAccel;
-begin
-  Sort(TComparer<TParticleData>.Construct(
-    function (const Left, Right: TParticleData): integer
-    begin
-      Result := Comparevalue(AbsVec(Left.Accel), AbsVec(Right.Accel));
-      if Result = 0 then
-        Result := Comparevalue(AbsVec(Left.Velocity), AbsVec(Right.Velocity));
-      if Result = 0 then
-        Result := Comparevalue(AbsVec(Left.Position), AbsVec(Right.Position));
-    end));
 end;
 
 procedure TParticles.SortByPosition;

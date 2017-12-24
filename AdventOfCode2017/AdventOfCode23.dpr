@@ -1,6 +1,7 @@
 program AdventOfCode23;
 
 {$APPTYPE CONSOLE}
+{$OPTIMIZATION ON}
 
 {$R *.res}
 
@@ -16,9 +17,6 @@ type
   end;
 
   TCPU = class
-  strict private
-    FRecovered: integer;
-    FSound    : int64;
   strict protected
     FIP       : integer;
     FMulCount : integer;
@@ -45,33 +43,42 @@ end;
 function PartB: integer;
 var
   a,b,c,d,e,f,g,h: int64;
+
+  function IsPrime(num: integer): boolean;
+  var
+    i: integer;
+  begin
+    Result := true;
+    for i := 2 to Round(Sqrt(num)) do
+      if (num mod i) = 0 then
+        Exit(false);
+//    Result := f;
+//    repeat
+//      e := 2;
+//      repeat
+//        if d * e = b then
+//          Exit(0);
+//        e := e + 1;
+//        g := e - b;
+//      until g = 0;
+//      d := d + 1;
+//      g := d - b;
+//    until g = 0;
+  end;
+
 begin
   a := 1;
   h := 0;
   b := 65;
   c := b;
   if a <> 0 then begin
-    b := b * 100 - 100000;
+    b := b * 100 + 100000;
     c := b + 17000;
   end;
   while true do begin
     f := 1;
     d := 2;
-    repeat
-      e := 2;
-      repeat
-        g := d * e - b;
-        if g = 0 then
-          f := 0;
-        e := e + 1;
-        g := e - b;
-      until g = 0;
-      // assert(f = 0);
-      d := d + 1;
-      g := d - b;
-    until g = 0;
-    //assert(f = 0:
-    if f = 0 then
+    if not IsPrime(b) then
       h := h + 1;
     g := b - c;
     if g = 0 then

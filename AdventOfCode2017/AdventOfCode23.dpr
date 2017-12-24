@@ -42,6 +42,44 @@ begin
   finally FreeAndNil(cpu); end;
 end;
 
+function PartB: integer;
+var
+  a,b,c,d,e,f,g,h: int64;
+begin
+  a := 1;
+  h := 0;
+  b := 65;
+  c := b;
+  if a <> 0 then begin
+    b := b * 100 - 100000;
+    c := b + 17000;
+  end;
+  while true do begin
+    f := 1;
+    d := 2;
+    repeat
+      e := 2;
+      repeat
+        g := d * e - b;
+        if g = 0 then
+          f := 0;
+        e := e + 1;
+        g := e - b;
+      until g = 0;
+      // assert(f = 0);
+      d := d + 1;
+      g := d - b;
+    until g = 0;
+    //assert(f = 0:
+    if f = 0 then
+      h := h + 1;
+    g := b - c;
+    if g = 0 then
+      Exit(h);
+    b := b + 17;
+  end;
+end;
+
 { TCPU }
 
 constructor TCPU.Create(const fileName: string);
@@ -114,6 +152,7 @@ end;
 begin
   try
     Writeln(PartA('..\..\AdventOfCode23.txt'));
+    Writeln(PartB);
   except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);

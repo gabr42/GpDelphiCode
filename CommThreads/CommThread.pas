@@ -3,7 +3,7 @@ unit CommThread;
 interface
 
 uses
-  System.Classes, System.SyncObjs, System.Generics.Collections;
+  System.Classes, System.SysUtils, System.SyncObjs, System.Generics.Collections;
 
 type
   TMessageProc<T> = reference to procedure (const data: T);
@@ -15,6 +15,7 @@ type
     FReceiver: TMessageProc<T>;
   strict protected
     procedure DispatchMessages;
+    function  MakeCallback(const value: T): TThreadProcedure;
   public
     constructor Create(numItems: integer;
       const messageReceiver: TMessageProc<T> = nil);
@@ -51,9 +52,6 @@ type
 
 implementation
 
-uses
-  System.SysUtils;
-
 { TMessageQueue<T> }
 
 constructor TMessageQueue<T>.Create(numItems: integer;
@@ -78,7 +76,16 @@ var
   value: T;
 begin
   while FQueue.PopItem(value) = wrSignaled do
-    FReceiver(value);
+    TThread.Queue(nil, MakeCallback(value));
+end;
+
+function TMessageQueue<T>.MakeCallback(const value: T): TThreadProcedure;
+begin
+  Result :=
+    procedure
+    begin
+      FReceiver(value);
+    end;
 end;
 
 function TMessageQueue<T>.Receive(var value: T): boolean;
@@ -92,7 +99,7 @@ begin
   if assigned(FEvent) then
     FEvent.SetEvent;
   if assigned(FReceiver) then
-    TThread.Queue(TThread.Current, DispatchMessages);
+    DispatchMessages;
 end;
 
 { TCommThread<TToThread, TToMain> }
@@ -116,7 +123,6 @@ begin
     while FToThread.Receive(data) do
       ProcessMessage(data);
   end;
-  TThread.RemoveQueuedEvents(TThread.Current);
 end;
 
 function TCommThread<TToThread, TToMain>.SendToMain(

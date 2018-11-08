@@ -34,26 +34,26 @@ type
 
 procedure TConnector.SetupBridge(const url1, url2: string);
 begin
-  Writeln('1: ', url1);
-  Writeln('2: ', url2);
+  Writeln('  1: ', url1);
+  Writeln('  2: ', url2);
 end;
 
 procedure TConnector.SetupBridge(const url1, proto2, host2, path2: string);
 begin
-  Writeln('1: ', url1);
-  Writeln('2: ', proto2, '://', host2, '/', path2);
+  Writeln('  1: ', url1);
+  Writeln('  2: ', proto2, '://', host2, '/', path2);
 end;
 
 procedure TConnector.SetupBridge(const proto1, host1, path1, proto2, host2, path2: string);
 begin
-  Writeln('1: ', proto1, '://', host1, '/', path1);
-  Writeln('2: ', proto2, '://', host2, '/', path2);
+  Writeln('  1: ', proto1, '://', host1, '/', path1);
+  Writeln('  2: ', proto2, '://', host2, '/', path2);
 end;
 
 //procedure TConnector.SetupBridge(const proto1, host1, path1, url2: string);
 //begin
-//  Writeln('1: ', proto1, '://', host1, '/', path1);
-//  Writeln('2: ', url2);
+//  Writeln('  1: ', proto1, '://', host1, '/', path1);
+//  Writeln('  2: ', url2);
 //end;
 
 var
@@ -81,12 +81,14 @@ end;
 
 procedure TConnector2.SetupBridge(const url1, url2: TURL);
 begin
-  Writeln('1: ' + url1);
-  Writeln('2: ' + url2);
+  Writeln('  1: ' + url1);
+  Writeln('  2: ' + url2);
 end;
 
 begin
   try
+    Writeln;
+
     conn := TConnector.Create;
     try
       conn.SetupBridge('http://www.thedelphigeek.com/index.html',
@@ -117,9 +119,12 @@ begin
     finally
       FreeAndNil(conn2);
     end;
+
     Readln;
   except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);
   end;
 end.
+
+

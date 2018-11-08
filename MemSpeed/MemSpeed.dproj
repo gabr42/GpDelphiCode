@@ -135,7 +135,6 @@
         </DelphiCompile>
         <DCCReference Include="MemSpeedMain.pas">
             <Form>frmMemSpeed</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

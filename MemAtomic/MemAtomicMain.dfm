@@ -1,7 +1,7 @@
 object frmMemSpeed: TfrmMemSpeed
   Left = 0
   Top = 0
-  Caption = 'MemSpeed'
+  Caption = 'MemAtomic'
   ClientHeight = 111
   ClientWidth = 254
   Color = clBtnFace

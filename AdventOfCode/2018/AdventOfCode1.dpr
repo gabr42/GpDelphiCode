@@ -55,6 +55,7 @@ begin
     Assert(PartA('..\..\AdventOfCode1testB.txt') = 0, 'A(testB) <> 0');
     Assert(PartA('..\..\AdventOfCode1testC.txt') = -6, 'A(testC) <> -6');
     Writeln('PartA: ', PartA('..\..\AdventOfCode1.txt'));
+
     Assert(PartB('..\..\AdventOfCode1testD.txt') = 0, 'B(testD) <> 0');
     Assert(PartB('..\..\AdventOfCode1testE.txt') = 10, 'B(testE) <> 10');
     Assert(PartB('..\..\AdventOfCode1testF.txt') = 5, 'B(testF) <> 5');

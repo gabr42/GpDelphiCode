@@ -113,5 +113,5 @@ begin
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);
   end;
-  Readln;
+  Write('> '); Readln;
 end.

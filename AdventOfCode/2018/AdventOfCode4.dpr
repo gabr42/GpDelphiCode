@@ -147,11 +147,10 @@ end;
 
 function PartB(const fileName: string): integer;
 var
-  guardID : integer;
-  guardLog: TGuardLog;
-  guards  : TGuards;
-  log     : TList<TLogEntry>;
-  minute  : integer;
+  guardID: integer;
+  guards : TGuards;
+  log    : TList<TLogEntry>;
+  minute : integer;
 begin
   log := TList<TlogEntry>.Create;
   try

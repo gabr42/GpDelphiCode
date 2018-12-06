@@ -58,9 +58,7 @@ function CreateArea(locList: TLocations; const locRect: TRect): TArea;
 var
   i: integer;
 begin
-  SetLength(Result, locRect.Height + 1);
-  for i := Low(Result) to High(Result) do
-    SetLength(Result[i], locRect.Width + 1);
+  SetLength(Result, locRect.Height + 1, locRect.Width + 1);
 
   if assigned(locList) then
     for i := 0 to locList.Count - 1 do
@@ -214,19 +212,15 @@ begin
     locRect := FindMinMax(locList);
     OffsetLoc(locList, locRect);
 
-    SetLength(rowDist, locRect.Height + 1);
-    for row := Low(rowDist) to High(rowDist) do begin
-      SetLength(rowDist[row], locList.Count);
+    SetLength(rowDist, locRect.Height + 1, locList.Count);
+    for row := Low(rowDist) to High(rowDist) do
       for i := 0 to locList.Count - 1 do
         rowDist[row,i] := Abs(locList[i].Y - row);
-    end;
 
-    SetLength(colDist, locRect.Width + 1);
-    for col := Low(colDist) to High(colDist) do begin
-      SetLength(colDist[col], locList.Count);
+    SetLength(colDist, locRect.Width + 1, locList.Count);
+    for col := Low(colDist) to High(colDist) do
       for i := 0 to locList.Count - 1 do
         colDist[col,i] := Abs(locList[i].X - col);
-    end;
 
     Result := 0;
     for row := locRect.Top to locRect.Bottom do

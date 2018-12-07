@@ -44,16 +44,6 @@ begin
         Exit(false);
 end;
 
-function SelectStep(const dependencies: TDependencies): string;
-var
-  ch: char;
-begin
-  Result := '';
-  for ch := 'A' to 'Z' do
-    if CanStart(dependencies, ch) then
-      Exit(ch);
-end;
-
 function SelectSteps(const dependencies: TDependencies): string;
 var
   ch: char;
@@ -76,16 +66,16 @@ end;
 function PartA(const fileName: string): string;
 var
   dependencies: TDependencies;
-  step        : string;
+  steps       : string;
 begin
   dependencies := LoadDependencies(fileName);
   Result := '';
   repeat
-    step := SelectStep(dependencies);
-    if step = '' then
+    steps := SelectSteps(dependencies);
+    if steps = '' then
       Exit;
-    Result := Result + step;
-    MarkCompleted(dependencies, step[1]);
+    Result := Result + steps[1];
+    MarkCompleted(dependencies, steps[1]);
   until false;
 end;
 

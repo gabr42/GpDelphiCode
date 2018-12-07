@@ -25,7 +25,6 @@ function PartA(const fileName: string): integer;
 var
   fabric: array of array of integer;
   height: integer;
-  i     : integer;
   id    : integer;
   left  : integer;
   reader: TStreamReader;
@@ -36,9 +35,7 @@ var
   y     : Integer;
 begin
   Result := 0;
-  SetLength(fabric, 1500);
-  for i := Low(fabric) to High(fabric) do
-    SetLength(fabric[i], 1500);
+  SetLength(fabric, 1500, 1500);
 
   reader := TStreamReader.Create(fileName);
   try
@@ -61,9 +58,8 @@ function PartB(const fileName: string): integer;
 var
   fabric: array of array of integer;
   height: integer;
-  i     : integer;
   id    : integer;
-  isOK: boolean;
+  isOK  : boolean;
   left  : integer;
   reader: TStreamReader;
   s     : string;
@@ -72,9 +68,8 @@ var
   x     : integer;
   y     : Integer;
 begin
-  SetLength(fabric, 1500);
-  for i := Low(fabric) to High(fabric) do
-    SetLength(fabric[i], 1500);
+  Result := 0;
+  SetLength(fabric, 1500, 1500);
 
   reader := TStreamReader.Create(fileName);
   try

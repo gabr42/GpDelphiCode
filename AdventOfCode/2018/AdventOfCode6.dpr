@@ -65,6 +65,7 @@ begin
       Result[locList[i].Y, locList[i].X] := i + 1;
 end;
 
+(*
 procedure DumpArea(const area: TArea);
 var
   i : integer;
@@ -77,69 +78,7 @@ begin
   end;
   Writeln;
 end;
-
-function InArea(row, col: integer; const locRect: TRect): boolean;
-begin
-  Result := (col >= locRect.Left) and (col <= locRect.Right) and
-            (row >= locRect.Top) and (row <= locRect.Bottom);
-end;
-
-function CountNeighbours(const area: TArea; row, col: integer; const locRect: TRect;
-  var id: integer): integer;
-var
-  dx    : integer;
-  dy    : integer;
-  idCell: integer;
-begin
-  Result := 0;
-  id := 0;
-  for dy := -1 to 1 do
-    for dx := -1 to 1 do
-      if ((Abs(dx) = 1) xor (Abs(dy) = 1))
-         and InArea(row+dy, col+dx, locRect)
-         and (area[row+dy,col+dx] <> 0)
-      then begin
-        idCell := area[row+dy,col+dx];
-        if idCell < 0 then
-          Exit(2)
-        else begin
-          if Result = 0 then begin
-            Result := 1;
-            id := idCell;
-          end
-          else if id <> idCell then
-            Exit(2);
-        end;
-      end;
-end;
-
-function MarkArea(var area: TArea; locRect: TRect): integer;
-var
-  areaOut: TArea;
-  col    : integer;
-  id     : integer;
-  neigh  : integer;
-  row    : integer;
-begin
-  Result := 0;
-  areaOut := CreateArea(nil, locRect);
-  for row := locRect.Top to locRect.Bottom do begin
-    for col := locRect.Left to locRect.Right do begin
-      areaOut[row,col] := area[row,col];
-      if area[row,col] = 0 then begin
-        neigh := CountNeighbours(area, row, col, locRect, id);
-        if neigh > 0 then begin
-          if neigh = 1 then
-            areaOut[row,col] := id
-          else
-            areaOut[row,col] := -1;
-          Inc(Result);
-        end;
-      end;
-    end;
-  end;
-  area := areaOut;
-end;
+*)
 
 function CountIslands(const area: TArea; locList: TLocations;
   const locRect: TRect): TArray<integer>;
@@ -167,12 +106,16 @@ end;
 function PartA(const fileName: string): integer;
 var
   area     : TArea;
-  claimed  : integer;
+  col      : integer;
+  dist     : integer;
+  i        : integer;
+  id       : integer;
   locList  : TLocations;
   locRect  : TRect;
+  minDist  : integer;
+  row      : integer;
   size     : integer;
   sizeList : TArray<integer>;
-  unclaimed: integer;
 begin
   locList := TLocations.Create;
   try
@@ -181,11 +124,22 @@ begin
     OffsetLoc(locList, locRect);
     area := CreateArea(locList, locRect);
 
-    unclaimed := (locRect.Width + 1) * (locRect.Height + 1) - locList.Count;
-    while unclaimed > 0 do begin
-      claimed := MarkArea(area, locRect);
-      Dec(unclaimed, claimed);
-    end;
+    for row := locRect.Top to locRect.Bottom do
+      for col := locRect.Left to locRect.Right do
+        if area[row,col] = 0 then begin
+          minDist := locRect.Width + locRect.Height;
+          id := 0;
+          for i := 0 to locList.Count - 1 do begin
+            dist := Abs(locList[i].Y - row) + Abs(locList[i].X - col);
+            if dist < minDist then begin
+              minDist := dist;
+              id := i + 1;
+            end
+            else if (dist = minDist) and (id > 0) and (id <> (i+1)) then
+              id := -1;
+          end;
+          area[row,col] := id;
+        end;
 
     sizeList := CountIslands(area, locList, locRect);
     Result := 0;
@@ -198,13 +152,11 @@ end;
 function PartB(const fileName: string; cutoffDistance: integer): integer;
 var
   col    : integer;
-  colDist: array of array of integer;
   dist   : integer;
   i      : integer;
   locList: TLocations;
   locRect: TRect;
   row    : integer;
-  rowDist: array of array of integer;
 begin
   locList := TLocations.Create;
   try
@@ -212,22 +164,12 @@ begin
     locRect := FindMinMax(locList);
     OffsetLoc(locList, locRect);
 
-    SetLength(rowDist, locRect.Height + 1, locList.Count);
-    for row := Low(rowDist) to High(rowDist) do
-      for i := 0 to locList.Count - 1 do
-        rowDist[row,i] := Abs(locList[i].Y - row);
-
-    SetLength(colDist, locRect.Width + 1, locList.Count);
-    for col := Low(colDist) to High(colDist) do
-      for i := 0 to locList.Count - 1 do
-        colDist[col,i] := Abs(locList[i].X - col);
-
     Result := 0;
     for row := locRect.Top to locRect.Bottom do
       for col := locRect.Left to locRect.Right do begin
         dist := 0;
         for i := 0 to locList.Count - 1 do
-          dist := dist + rowDist[row,i] + colDist[col,i];
+          dist := dist + Abs(locList[i].Y - row) + Abs(locList[i].X - col);
         if dist < cutoffDistance then
           Inc(Result);
       end;

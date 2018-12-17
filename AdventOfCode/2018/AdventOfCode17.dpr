@@ -27,7 +27,7 @@ type
     function GetText: AnsiString;
   public
     function Count(valid: TAnsiChars): integer;
-    function Find(above: TAnsiChars): TArray<integer>;
+    function Find(values: TAnsiChars): TArray<integer>;
     procedure FindLimits(col: integer; nextLine: TSlice;
       var limits: TPoint; var isOpen: boolean);
     procedure MakeClay(left, right: integer);
@@ -57,7 +57,7 @@ type
     function Waterfall: boolean;
   public
     constructor Create(ground: TGround);
-    function CountWater: integer;
+    function Count(value: AnsiChar): integer;
     procedure Run;
   end;
 
@@ -76,7 +76,7 @@ begin
       Inc(Result);
 end;
 
-function TSlice.Find(above: TAnsiChars): TArray<integer>;
+function TSlice.Find(values: TAnsiChars): TArray<integer>;
 var
   col: integer;
   list: TList<integer>;
@@ -84,7 +84,7 @@ begin
   list := TList<integer>.Create;
   try
     for col := Left to Right do
-      if Cell[col] in above then
+      if Cell[col] in values then
         list.Add(col);
     Result := list.ToArray;
   finally FreeAndNil(list); end;
@@ -260,13 +260,19 @@ end;
 
 { TSimulator }
 
-function TSimulator.CountWater: integer;
+function TSimulator.Count(value: AnsiChar): integer;
 var
+  hasWall: boolean;
   slice: TSlice;
 begin
   Result := 0;
-  for slice in FGround do
-    Result := Result + slice.Count(['~', '|']);
+  hasWall := false;
+  for slice in FGround do begin
+    if not hasWall then
+      hasWall := Length(slice.Find(['#'])) > 0;
+    if hasWall then
+      Result := Result + slice.Count([value]);
+  end;
 end;
 
 constructor TSimulator.Create(ground: TGround);
@@ -340,7 +346,7 @@ end;
 
 { main }
 
-function PartA(const fileName: string): integer;
+function PartA(const fileName: string; var stillWater: integer): integer;
 var
   ground: TGround;
   simulator: TSimulator;
@@ -351,15 +357,21 @@ begin
     simulator := TSimulator.Create(ground);
     try
       simulator.Run;
-      Result := simulator.CountWater;
+      stillWater := simulator.Count('~');
+      Result := stillWater + simulator.Count('|');
     finally FreeAndNil(simulator); end;
   finally FreeAndNil(ground); end;
 end;
 
+var
+  still: integer;
+
 begin
   try
-    Assert(PartA('..\..\AdventOfCode17test.txt') = 57, 'PartA(test) <> 57');
-    Writeln('PartA: ', PartA('..\..\AdventOfCode17.txt'));
+    Assert(PartA('..\..\AdventOfCode17test.txt', still) = 57, 'PartA(test) <> 57');
+    Assert(still = 29, 'PartB(test) <> 29');
+    Writeln('PartA: ', PartA('..\..\AdventOfCode17.txt', still));
+    Writeln('PartB: ', still);
   except
     on E: Exception do
       Writeln(E.ClassName, ': ', E.Message);

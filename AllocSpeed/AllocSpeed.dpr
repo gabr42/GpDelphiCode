@@ -13,11 +13,7 @@ uses
   System.Generics.Collections;
 
 const
-    CMemBlockSize = 264752;
-
-type
-  EUnusedException = class(Exception)
-  end;
+  CMemBlockSize = 264752;
 
 procedure Measure;
 var

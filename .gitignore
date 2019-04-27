@@ -58,3 +58,25 @@ __history/
 
 # DelphiLens
 *.dlens
+
+AllocSpeed/BottomVsTop_2x_E5_2620_2_0\.jpg
+
+AllocSpeed/BottomVsTop_i7_8750_2_2\.jpg
+
+AllocSpeed/memory-AMD-1920x @ 3\.7GHz\.csv
+
+AllocSpeed/memory-Core-i7-8700k @ 4\.4GHz\.csv
+
+AllocSpeed/memory-Dell-XPS15-9560-Corei7-7700HQ-2_8GHz\.csv
+
+AllocSpeed/memory-i7-8750_2_20-old\.csv
+
+AllocSpeed/memory-i7-8750_2_20\.csv
+
+AllocSpeed/memory-z820-old\.csv
+
+AllocSpeed/memory-z820\.csv
+
+AllocSpeed/VirtualAllocSpeed\.jpg
+
+AllocSpeed/MemoryAllocationSpeed\.xlsx
